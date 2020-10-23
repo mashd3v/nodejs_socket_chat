@@ -38,7 +38,6 @@ socket.on('createMessage', function(message) {
 // Listen users changes
 socket.on('peopleList', function(people) {
     // console.log(people);
-    renderPartyName();
     renderUsers(people);
 });
 
