@@ -17,7 +17,9 @@ socket.on('connect', function() {
     console.log('Server connected.');
 
     socket.emit('loginChat', user, function(res) {
-        console.log('Connected users: ', res);
+        // console.log('Connected users: ', res);
+        renderPartyName();
+        renderUsers(res);
     });
 
 });
@@ -26,22 +28,18 @@ socket.on('disconnect', function() {
     console.log('Server connection lost.');
 });
 
-// Send info
-socket.emit('sendMessage', {
-    user: 'Miguel',
-    message: 'Hello World',
-}, function(res) {
-    console.log('Server response:', res);
-});
-
 // Listen info
 socket.on('createMessage', function(message) {
-    console.log('Server:', message);
+    // console.log('Server:', message);
+    renderMessages(message, false);
+    scrollBottom();
 });
 
 // Listen users changes
 socket.on('peopleList', function(people) {
-    console.log(people);
+    // console.log(people);
+    renderPartyName();
+    renderUsers(people);
 });
 
 // Private messages

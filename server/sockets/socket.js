@@ -21,15 +21,19 @@ io.on('connection', (client) => {
 
         client.broadcast.to(data.party).emit('peopleList', users.getPeopleByParty(data.party));
 
+        client.broadcast.to(data.party).emit('createMessage', createMessage('Admin', `${data.name} joined the party chat.`));
+
         callback(users.getPeopleByParty(data.party));
 
     });
 
-    client.on('createMessage', (data) => {
+    client.on('createMessage', (data, callback) => {
 
         let person = users.getPerson(client.id);
         let message = createMessage(person.name, data.message);
         client.broadcast.to(person.party).emit('createMessage', message);
+
+        callback(message);
 
     });
 
@@ -45,7 +49,7 @@ io.on('connection', (client) => {
 
         let deletedPerson = users.deletePerson(client.id);
 
-        client.broadcast.to(deletedPerson.party).emit('createMessage', createMessage('Admin', `${deletedPerson.name} left party chat.`));
+        client.broadcast.to(deletedPerson.party).emit('createMessage', createMessage('Admin', `${deletedPerson.name} left the party chat.`));
 
         client.broadcast.to(deletedPerson.party).emit('peopleList', users.getPeopleByParty(deletedPerson.party));
 
